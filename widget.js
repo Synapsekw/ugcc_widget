@@ -1,5 +1,5 @@
 /**
- * UGCC AI Chat Widget - Mobile Header Fix v4
+ * UGCC AI Chat Widget - Visual Polish (Scrollbar Fix) v5
  */
 
 class GlassChatWidget {
@@ -118,8 +118,7 @@ class GlassChatWidget {
         return `
             :host {
                 --primary: ${this.primaryColor};
-                --glass-bg: rgba(10, 10, 15, 0.9); 
-                --glass-blur: blur(15px);
+                --glass-bg: rgba(10, 10, 15, 0.95); /* Slightly darker for better contrast */
                 --glass-border: rgba(255, 255, 255, 0.15);
                 font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 z-index: 2147483647; 
@@ -149,10 +148,13 @@ class GlassChatWidget {
             .chat-container {
                 width: 380px; height: 600px; max-height: 80vh;
                 background-color: var(--glass-bg); 
-                backdrop-filter: var(--glass-blur);
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
                 border: 1px solid var(--glass-border);
                 border-radius: 20px;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                /* This forces the corners to clip even with child elements */
+                overflow: hidden; 
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
                 display: flex; flex-direction: column;
                 position: absolute; bottom: 0; right: 0;
                 transform-origin: bottom right;
@@ -162,31 +164,36 @@ class GlassChatWidget {
             }
             .chat-container.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
 
-            /* HEADER FIXES - FORCE WHITE TEXT */
             .chat-header {
-                padding: 18px 24px; background: rgba(255, 255, 255, 0.05);
+                padding: 18px 24px; 
+                background: rgba(255, 255, 255, 0.05);
                 border-bottom: 1px solid rgba(255,255,255,0.05);
                 display: flex; justify-content: space-between; align-items: center;
                 min-height: 30px;
+                /* Force top corners to round in case overflow fails */
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
             }
-            .header-title { 
-                font-weight: 600; 
-                font-size: 16px; 
-                color: #ffffff !important; /* FORCED WHITE */
-                text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-            }
-            .close-btn { 
-                background: none; 
-                border: none; 
-                cursor: pointer; 
-                color: #ffffff !important; /* FORCED WHITE */
-                opacity: 0.8;
-                font-size: 28px; 
-                padding: 0 5px;
-            }
+            .header-title { font-weight: 600; font-size: 16px; color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+            .close-btn { background: none; border: none; cursor: pointer; color: #ffffff !important; opacity: 0.8; font-size: 28px; padding: 0 5px; }
 
-            .chat-messages { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+            /* --- CUSTOM SCROLLBAR (THE FIX) --- */
+            .chat-messages { 
+                flex: 1; 
+                padding: 24px; 
+                overflow-y: auto; 
+                display: flex; 
+                flex-direction: column; 
+                gap: 16px;
+                scrollbar-width: thin; 
+                scrollbar-color: rgba(255,255,255,0.2) transparent; /* Firefox */
+            }
             
+            /* Chrome/Safari Scrollbar Fix */
+            .chat-messages::-webkit-scrollbar { width: 6px; }
+            .chat-messages::-webkit-scrollbar-track { background: transparent; } /* Transparent Track */
+            .chat-messages::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+
             .message { display: flex; flex-direction: column; max-width: 85%; }
             .message.user { align-self: flex-end; align-items: flex-end; }
             .message.bot { align-self: flex-start; align-items: flex-start; }
@@ -204,18 +211,15 @@ class GlassChatWidget {
             .chat-input input { font-size: 16px; flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 12px; color: white; outline: none; }
             .send-btn { background: var(--primary); border: none; width: 44px; height: 44px; border-radius: 12px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-            /* MOBILE OPTIMIZATION */
             @media (max-width: 480px) {
                 .chat-container {
-                    position: fixed;
-                    bottom: 0 !important; right: 0 !important; left: 0 !important; top: 0 !important;
-                    width: 100vw !important; height: 100dvh !important;
-                    max-height: 100dvh !important;
+                    position: fixed; bottom: 0 !important; right: 0 !important; left: 0 !important; top: 0 !important;
+                    width: 100vw !important; height: 100dvh !important; max-height: 100dvh !important;
                     border-radius: 0 !important; transform: none !important; margin: 0 !important;
-                    background-color: rgba(10, 10, 15, 0.98); /* Solid dark bg for mobile */
+                    background-color: rgba(10, 10, 15, 0.98);
                 }
                 .chat-container.open { opacity: 1; pointer-events: all; transform: none !important; }
-                .chat-header { padding-top: 20px; } /* Space for Status Bar */
+                .chat-header { padding-top: 20px; border-radius: 0; }
             }
         `;
     }
