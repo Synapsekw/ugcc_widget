@@ -1,5 +1,5 @@
 /**
- * UGCC AI Chat Widget - Visual Polish (Scrollbar Fix) v5
+ * UGCC AI Chat Widget - Large Desktop Mode v6
  */
 
 class GlassChatWidget {
@@ -118,7 +118,7 @@ class GlassChatWidget {
         return `
             :host {
                 --primary: ${this.primaryColor};
-                --glass-bg: rgba(10, 10, 15, 0.95); /* Slightly darker for better contrast */
+                --glass-bg: rgba(10, 10, 15, 0.95); 
                 --glass-border: rgba(255, 255, 255, 0.15);
                 font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 z-index: 2147483647; 
@@ -144,15 +144,19 @@ class GlassChatWidget {
             .launcher-img { width: 60%; height: 60%; object-fit: contain; pointer-events: none; }
             .launcher-icon { width: 30px; height: 30px; fill: white; }
 
-            /* MAIN CHAT CONTAINER */
+            /* MAIN CHAT CONTAINER (DESKTOP) */
             .chat-container {
-                width: 380px; height: 600px; max-height: 80vh;
+                /* --- INCREASED SIZE HERE --- */
+                width: 450px;          /* Wider */
+                height: 700px;         /* Taller */
+                max-height: 85vh;      /* Safety limit for small laptops */
+                /* -------------------------- */
+                
                 background-color: var(--glass-bg); 
                 backdrop-filter: blur(15px);
                 -webkit-backdrop-filter: blur(15px);
                 border: 1px solid var(--glass-border);
                 border-radius: 20px;
-                /* This forces the corners to clip even with child elements */
                 overflow: hidden; 
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
                 display: flex; flex-direction: column;
@@ -170,14 +174,13 @@ class GlassChatWidget {
                 border-bottom: 1px solid rgba(255,255,255,0.05);
                 display: flex; justify-content: space-between; align-items: center;
                 min-height: 30px;
-                /* Force top corners to round in case overflow fails */
                 border-top-left-radius: 20px;
                 border-top-right-radius: 20px;
             }
             .header-title { font-weight: 600; font-size: 16px; color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
             .close-btn { background: none; border: none; cursor: pointer; color: #ffffff !important; opacity: 0.8; font-size: 28px; padding: 0 5px; }
 
-            /* --- CUSTOM SCROLLBAR (THE FIX) --- */
+            /* SCROLLBAR */
             .chat-messages { 
                 flex: 1; 
                 padding: 24px; 
@@ -186,12 +189,10 @@ class GlassChatWidget {
                 flex-direction: column; 
                 gap: 16px;
                 scrollbar-width: thin; 
-                scrollbar-color: rgba(255,255,255,0.2) transparent; /* Firefox */
+                scrollbar-color: rgba(255,255,255,0.2) transparent; 
             }
-            
-            /* Chrome/Safari Scrollbar Fix */
             .chat-messages::-webkit-scrollbar { width: 6px; }
-            .chat-messages::-webkit-scrollbar-track { background: transparent; } /* Transparent Track */
+            .chat-messages::-webkit-scrollbar-track { background: transparent; } 
             .chat-messages::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
 
             .message { display: flex; flex-direction: column; max-width: 85%; }
@@ -211,6 +212,7 @@ class GlassChatWidget {
             .chat-input input { font-size: 16px; flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 12px; color: white; outline: none; }
             .send-btn { background: var(--primary); border: none; width: 44px; height: 44px; border-radius: 12px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
+            /* MOBILE OPTIMIZATION (This overrides the desktop size above) */
             @media (max-width: 480px) {
                 .chat-container {
                     position: fixed; bottom: 0 !important; right: 0 !important; left: 0 !important; top: 0 !important;
